@@ -47,19 +47,23 @@
                   <input
                     type='number'
                     id='c0'
-                    class='form-control'
+                    class='form-control is-valid'
                     title='Initial concentration (percentage).'
                     value='99.8'
                     min='0'
                     max='100'
                     step='0.1'
+                    required
                   />
 
                   <div class='input-group-append'>
                     <span class='input-group-text'>%</span>
                   </div><!-- input-group-append -->
-                </div><!-- input-group -->
 
+                  <div id='c0-invalid' class='invalid-feedback'>
+                    Error
+                  </div>
+                </div><!-- input-group -->
 
                 <p class='form-text text-muted'>
                   The initial concentration, as a percentage.
@@ -79,11 +83,16 @@
                 <input
                   type='number'
                   id='v0'
-                  class='form-control'
+                  class='form-control is-valid'
                   title='Initial volume (liters, gallons, etc).'
                   value='7'
                   min='0'
+                  required
                 />
+
+                <div id='v0-invalid' class='invalid-feedback'>
+                  Error
+                </div>
 
                 <p class='form-text text-muted'>
                   The initial volume.  The unit doesn't matter (liters,
@@ -113,11 +122,16 @@
                     min='0'
                     max='100'
                     step='0.1'
+                    required
                   />
 
                   <div class='input-group-append'>
                     <span class='input-group-text'>%</span>
                   </div><!-- input-group-append -->
+
+                  <div id='c1-invalid' class='invalid-feedback'>
+                    Error
+                  </div>
                 </div><!-- input-group -->
 
                 <p class='form-text text-muted'>
@@ -140,11 +154,15 @@
                 <input
                   type='text'
                   id='vs'
-                  class='form-control'
+                  class='form-control is-valid'
                   title='Volume of solvent (liters, gallons, etc).'
                   value=''
                   readonly
                 />
+
+                <div class='invalid-feedback'>
+                  Please correct the errors above.
+                </div>
 
                 <p class='form-text text-muted'>
                   The volume of solvent to mix with the original
@@ -165,11 +183,15 @@
                 <input
                   type='text'
                   id='v1'
-                  class='form-control'
+                  class='form-control is-valid'
                   title='Total output volume (liters, gallons, etc).'
                   value=''
                   readonly
                 />
+
+                <div class='invalid-feedback'>
+                  Please correct the errors above.
+                </div>
 
                 <p class='form-text text-muted'>
                   The total volume that you will have when finished.
@@ -201,7 +223,7 @@
                     href='https://en.wikipedia.org/wiki/Dilution_(equation)'
                     target='_blank'
                     title='View dilution equation on Wikipedia.'
-                  >Dilution equation</a>
+                  >Dilution equation (Wikipedia)</a>
                 </td>
               </tr>
 
@@ -211,7 +233,7 @@
                 </td>
 
                 <td>
-                  solve for V<sub>1</sub>
+                  Solve for V<sub>1</sub>
                 </td>
               </tr>
 
@@ -221,16 +243,37 @@
                 </td>
 
                 <td>
-                  calculate volume of solvent
+                  Calculate volume of solvent
                 </td>
               </tr>
             </tbody>
 
             <caption>
-              Steps to calculate dilution given an initial
-              concentration, initial volume, and desired concentration.
+              Steps to calculate volume of solvent needed to dilute a
+              given volume and concentration to a given desired
+              concentration.
             </caption>
           </table>
+
+          <ul class='nav justify-content-center'>
+            <li class='nav-item'>
+              <a
+                href='https://github.com/pablotron/dilute'
+                class='nav-link'
+                target='_blank'
+                title='GitHub repository.'
+              >GitHub Repository</a>
+            </li><!-- nav-item -->
+
+            <li class='nav-item'>
+              <a
+                href='https://github.com/pablotron/dilute/issues'
+                class='nav-link'
+                target='_blank'
+                title='File a bug.'
+              >Report a Bug</a>
+            </li><!-- nav-item -->
+          </ul><!-- nav -->
         </div><!-- card-body -->
       </div><!-- card -->
     </div><!-- container -->
@@ -241,16 +284,97 @@
           return document.getElementById(id);
         }
 
+        function get_vals() {
+          var c0 = +(get('c0').value),
+              c1 = +(get('c1').value),
+              v0 = +(get('v0').value),
+              v1 = (c0 * v0) / c1;
+          return {
+            c0: c0,
+            c1: c1,
+            v0: v0,
+            v1: v1,
+            vs: (v1 - v0),
+          };
+        }
+
+        function check(r) {
+          var errs = [];
+
+          // check c0
+          if (r.c0 <= 0 || r.c0 > 100) {
+            errs.push({
+              id:   'c0',
+              text: 'Initial concentration must be between 0 and 100',
+            });
+          }
+
+          // check c1
+          if (r.c1 <= 0 || r.c1 > 100) {
+            errs.push({
+              id:   'c1',
+              text: 'Desired concentration be between 0 and 100',
+            });
+          }
+
+          // check c1 > c0
+          if (r.c1 > r.c0) {
+            errs.push({
+              id:   'c1',
+              text: 'Desired concentration cannot be greater than initial concentration.',
+            });
+          }
+
+          // check v0
+          if (r.v0 <= 0) {
+            errs.push({
+              id:   'v0',
+              text: 'Initial volume be greater than zero',
+            });
+          }
+
+          // return errors
+          return errs;
+        }
+
+        var IDS = ['c0', 'c1', 'v0', 'v1', 'vs'];
+
         function update() {
           setTimeout(function() {
-            var c0 = +(get('c0').value),
-                c1 = +(get('c1').value),
-                v0 = +(get('v0').value),
-                v1 = (c0 * v0) / c1,
-                vs = (v1 - v0);
+            var r = get_vals(),
+                errs = check(r);
 
-            get('vs').value = vs.toFixed(1);
-            get('v1').value = v1.toFixed(1);
+            // clear errors
+            IDS.forEach(function(id) {
+              var css = get(id).classList;
+              css.remove('is-invalid');
+              css.add('is-valid');
+              // get(id + '-invalid').classList.add('hidden');
+            });
+
+            if (errs.length > 0) {
+              // show errors
+              errs.forEach(function(row) {
+                var css = get(row.id).classList;
+                css.remove('is-valid');
+                css.add('is-invalid');
+                get(row.id + '-invalid').innerText = row.text;
+              });
+
+              ['v1', 'vs'].forEach(function(id) {
+                var css = get(id).classList;
+                css.remove('is-valid');
+                css.add('is-invalid');
+              });
+
+              // clear results
+              get('vs').value = 'n/a';
+              get('v1').value = 'n/a';
+            } else {
+              // no errors, calculate values
+              get('vs').value = r.vs.toFixed(1);
+              get('v1').value = r.v1.toFixed(1);
+            }
           }, 10);
         }
 
