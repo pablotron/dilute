@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang='en-US'>
+  <head>
+    <meta charset='utf-8'/>
+    <meta
+      name='viewport'
+      content='width=device-width, initial-scale=1, shrink-to-fit=no'
+    />
+
+    <title>Dilution Buddy</title>
+    <link
+      rel='stylesheet'
+      type='text/css'
+      href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+      integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T'
+      crossorigin='anonymous'
+    />
+  </head>
+
+  <body>
+    <br/>
+    <div class='container'>
+      <div class='card'>
+        <div class='card-header'>
+          <b>Dilution Buddy</b>
+        </div><!-- card-header -->
+
+        <div class='card-body'>
+          <p>
+            Enter values in the <b>Initial Concentration</b>,
+            <b>Initial Volume</b>, and <b>Desired Concentration</b>
+            fields.  The amount of solvent to add to get to the desired
+            concentration will be shown in the <b>Solvent Volume</b>
+            field.
+          </p>
+
+          <div class='row'>
+            <div class='col'>
+              <div class='form-group'>
+                <label 
+                  for='c0'
+                  title='Initial concentration (percentage).'
+                >
+                  Initial Concentration (%)
+                </label><br/>
+
+                <input
+                  type='number' 
+                  id='c0'
+                  class='form-control'
+                  title='Initial concentration (percentage).'
+                  value='99.8'
+                  min='0'
+                  max='100'
+                  step='0.1'
+                />
+
+                <p class='form-text muted'>
+                  The initial concentration, as a percentage.
+                </p><!-- form-text -->
+              </div><!-- form-group -->
+            </div><!-- col -->
+
+            <div class='col'>
+              <div class='form-group'>
+                <label
+                  for='v0'
+                  title='Initial volume (liters, gallons, etc).'
+                >
+                  Initial Volume
+                </label><br/>
+
+                <input
+                  type='number' 
+                  id='v0'
+                  class='form-control'
+                  title='Initial volume (liters, gallons, etc).'
+                  value='7'
+                  min='0'
+                />
+
+                <p class='form-text muted'>
+                  The initial volume.  The unit doesn't matter (liters,
+                  gallons, etc).
+                </p><!-- form-text -->
+              </div><!-- form-group -->
+            </div><!-- col -->
+          </div><!-- row -->
+      
+          <div class='row'>
+            <div class='col'>
+              <div class='form-group'>
+                <label
+                  for='c1'
+                  title='Desired concentration (percentage).'
+                >
+                  Desired Concentration (%)
+                </label><br/>
+
+                <input
+                  type='number' 
+                  id='c1'
+                  class='form-control'
+                  title='Desired concentration (percentage).'
+                  value='70'
+                  min='0'
+                  max='100'
+                  step='0.1'
+                />
+
+                <p class='form-text muted'>
+                  The desired concentration, as a percentage.
+                </p><!-- form-text -->
+              </div><!-- form-group -->
+            </div><!-- col -->
+          </div><!-- row -->
+
+          <div class='row'>
+            <div class='col'>
+              <div class='form-group'>
+                <label
+                  for='vs'
+                  title='Volume of solvent (liters, gallons, etc).'
+                >
+                  Solvent Volume
+                </label><br/>
+
+                <input
+                  type='text' 
+                  id='vs'
+                  class='form-control'
+                  title='Volume of solvent (liters, gallons, etc).'
+                  value=''
+                  readonly
+                />
+
+                <p class='form-text muted'>
+                  The volume of solvent to mix with the original solution in
+                  order to get the desired concentration.
+                </p><!-- form-text -->
+              </div><!-- form-group -->
+            </div><!-- col -->
+
+            <div class='col'>
+              <div class='form-group'>
+                <label
+                  for='v1'
+                  title='Total output volume (liters, gallons, etc).'
+                >
+                  Output Volume
+                </label><br/>
+
+                <input
+                  type='text' 
+                  id='v1'
+                  class='form-control'
+                  title='Total output volume (liters, gallons, etc).'
+                  value=''
+                  readonly
+                />
+
+                <p class='form-text muted'>
+                  The total volume that you will have when finished.
+                </p><!-- form-text -->
+              </div><!-- form-group -->
+            </div><!-- col -->
+          </div><!-- row -->
+        </div><!-- card-body -->
+
+        <div class='card-body'>
+          <p>
+            <b>Steps</b>
+          </p>
+
+          <ul class='list-group'>
+            <li class='list-group-item'>
+              C<sub>0</sub> &sdot; V<sub>0</sub> = C<sub>1</sub> &sdot; V<sub>1</sub>
+              (<a
+                href='https://en.wikipedia.org/wiki/Dilution_(equation)'
+                target='_blank'
+                title='View dilution equation on Wikipedia.'
+              >Dilution equation</a>)
+            </li>
+
+            <li class='list-group-item'>
+              V<sub>1</sub> = C<sub>0</sub> &sdot; V<sub>0</sub> / C<sub>1</sub>
+              (solve for V<sub>1</sub>)
+            </li>
+
+            <li class='list-group-item'>
+              V<sub>s</sub> = V<sub>1</sub> - V<sub>0</sub>
+              (calculate volume of solvent)
+            </li>
+          </ul><!-- list-group -->
+        </div><!-- card-body -->
+      </div><!-- card -->
+    </div><!-- container -->
+
+    <script type='text/javascript'>
+      document.addEventListener('DOMContentLoaded', function() {
+        function get(id) {
+          return document.getElementById(id);
+        }
+
+        function update() {
+          setTimeout(function() {
+            var c0 = +(get('c0').value),
+                c1 = +(get('c1').value),
+                v0 = +(get('v0').value),
+                v1 = (c0 * v0) / c1,
+                vs = (v1 - v0);
+
+            get('vs').value = vs.toFixed(1);
+            get('v1').value = v1.toFixed(1);
+          }, 10);
+        }
+
+        ['c0', 'v0', 'c1'].forEach(function(id) {
+          get(id).addEventListener('keydown', update);
+        });
+
+        // initial update, focus concentration
+        update();
+        get('c1').focus();
+      });
+    </script>
+  </body>
+</html>
+
