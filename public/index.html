@@ -29,9 +29,8 @@
           <p>
             Enter values in the <b>Initial Concentration</b>,
             <b>Initial Volume</b>, and <b>Desired Concentration</b>
-            fields.  The amount of solvent to add to get to the desired
-            concentration will be shown in the <b>Solvent Volume</b>
-            field.
+            fields.  The amount of solvent to add will be shown in the
+            <b>Solvent Volume</b> field.
           </p>
 
           <div class='row'>
@@ -122,7 +121,7 @@
                   for='vs'
                   title='Volume of solvent (liters, gallons, etc).'
                 >
-                  Solvent Volume
+                  <b>Solvent Volume</b>
                 </label><br/>
 
                 <input
@@ -135,8 +134,8 @@
                 />
 
                 <p class='form-text muted'>
-                  The volume of solvent to mix with the original solution in
-                  order to get the desired concentration.
+                  The volume of solvent to mix with the original
+                  solution.
                 </p><!-- form-text -->
               </div><!-- form-group -->
             </div><!-- col -->
@@ -172,26 +171,53 @@
             <b>Steps</b>
           </p>
 
-          <ul class='list-group'>
-            <li class='list-group-item'>
-              C<sub>0</sub> &sdot; V<sub>0</sub> = C<sub>1</sub> &sdot; V<sub>1</sub>
-              (<a
-                href='https://en.wikipedia.org/wiki/Dilution_(equation)'
-                target='_blank'
-                title='View dilution equation on Wikipedia.'
-              >Dilution equation</a>)
-            </li>
+          <table class='table table-hover'>
+            <thead>
+              <th>Step</th>
+              <th>Description</th>
+            </thead>
 
-            <li class='list-group-item'>
-              V<sub>1</sub> = C<sub>0</sub> &sdot; V<sub>0</sub> / C<sub>1</sub>
-              (solve for V<sub>1</sub>)
-            </li>
+            <tbody>
+              <tr>
+                <td>
+                  C<sub>0</sub> &sdot; V<sub>0</sub> = C<sub>1</sub> &sdot; V<sub>1</sub>
+                </td>
 
-            <li class='list-group-item'>
-              V<sub>s</sub> = V<sub>1</sub> - V<sub>0</sub>
-              (calculate volume of solvent)
-            </li>
-          </ul><!-- list-group -->
+                <td>
+                  <a
+                    href='https://en.wikipedia.org/wiki/Dilution_(equation)'
+                    target='_blank'
+                    title='View dilution equation on Wikipedia.'
+                  >Dilution equation</a>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  V<sub>1</sub> = C<sub>0</sub> &sdot; V<sub>0</sub> / C<sub>1</sub>
+                </td>
+
+                <td>
+                  solve for V<sub>1</sub>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  V<sub>s</sub> = V<sub>1</sub> - V<sub>0</sub>
+                </td>
+
+                <td>
+                  calculate volume of solvent
+                </td>
+              </tr>
+            </tbody>
+
+            <caption>
+              Steps to calculate dilution given an initial
+              concentration, initial volume, and desired concentration.
+            </caption>
+          </table>
         </div><!-- card-body -->
       </div><!-- card -->
     </div><!-- container -->
